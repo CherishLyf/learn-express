@@ -1,0 +1,12 @@
+#!/usr/bin/nodejs
+
+// 引入 debug 中间件 打印调试日志
+var debug = require('debug')('my-application');
+var app = require('../app');
+
+// 设置端口号
+app.set('port', process.env.PORT || 3000);
+
+var server = app.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});
