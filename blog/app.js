@@ -8,13 +8,29 @@ var bodyParser = require('body-parser');
 
 // 引入 router
 var routes = require('./routes/index');
+var settings = require('./settings')
+var session = require('express-session')
+var MongoStore = require('connect-mongo')(session)
 
 var app = express();
 
+app.use(session({
+  secret: settings.cookieSecret,
+  key: settings.db,     // cookie name
+  cookie: { maxAge: 1000 * 60 * 60* 24 * 30 },    // 30 days
+  store: new MongoStore({
+    // db: settings.db,
+    // host: settings.host,
+    // port: settings.port
+    url: "mongodb://" + settings.host + "/" + settings.db
+  })
+}))
 
 // 设置 views 文件夹作为存放视图模板文件的目录，
 // __direname 为全局变量， 储存当前脚本所在目录
 app.set('views', path.join(__dirname, 'views'));
+
+// 指定模板引擎为 ejs
 app.set('view engine', 'ejs');
 
 app.use(favicon());
