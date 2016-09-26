@@ -5,3 +5,8 @@ public: 存放 image, css, js 等文件  <br/>
 routes: 存放路由文件 <br/>
 views: 存放视图文件  <br/>
 bin: 存放可执行文件
+
+<!-- 热加载 -->
+npm install -g supervisor
+
+supervisor ./bin/www

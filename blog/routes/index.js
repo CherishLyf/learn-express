@@ -1,7 +1,7 @@
 module.exports = function(app) {
   // 首页
   app.get('/', function(req, res){
-    res.render('index', { title: 'Express' })
+    res.render('index', { title: '主页' })
   })
 
   // 注册
@@ -30,6 +30,6 @@ module.exports = function(app) {
 
   // 登出
   app.get('/logout', function(req, res){
-    
+
   })
 }
