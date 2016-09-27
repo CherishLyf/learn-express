@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 // 引入 router
 var routes = require('./routes/index');
 var settings = require('./settings')
+var flash = require("connect-flash")
 var session = require('express-session')
 var MongoStore = require('connect-mongo')(session)
 
@@ -32,6 +33,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // 指定模板引擎为 ejs
 app.set('view engine', 'ejs');
+app.use(flash())
 
 app.use(favicon());
 
@@ -78,6 +80,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
 
 module.exports = app;
