@@ -9,7 +9,7 @@ function User(user) {
 module.exports = User
 
 // 储存用户信息
-User.prototype.save = function() {
+User.prototype.save = function(callback) {
   // 要存入数据库的用户文档
   var user = {
     name: this.name,
@@ -35,7 +35,7 @@ User.prototype.save = function() {
         if(err) {
           return callback(err)  // 错误， 返回 err 信息
         }
-        callback(null, user[0]) // 陈工， err 为 null, 并返回储存后的用户文档
+        callback(null, user[0]); // 陈工， err 为 null, 并返回储存后的用户文档
       })
     })
   })
