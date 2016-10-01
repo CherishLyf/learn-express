@@ -1,6 +1,25 @@
 var crypto = require('crypto'),   // 生成散列值来加密密码
     User = require('../models/user')
 
+// 检测是否登陆
+function checkLogin(req, res, next) {
+  if(!req.session.user) {
+    req.flash('error', '未登录!')
+    req.redirect('/login')
+  }
+
+  next()
+}
+function checkNotLogin(req, res, next) {
+  if(req.session.user) {
+    req.flash('error', '已登陆！')
+    res.redirect('back')    // 返回之前的页面
+  }
+
+  next()
+}
+
+
 module.exports = function(app) {
   // 首页
   app.get('/', function(req, res){
@@ -13,6 +32,7 @@ module.exports = function(app) {
   })
 
   // 注册
+  app.get('/reg', checkNotLogin)  // 检测是否登陆
   app.get('/reg', function(req, res){
     res.render('reg', {
       title: '注册',
@@ -21,6 +41,7 @@ module.exports = function(app) {
       error: req.flash('error').toString()
     })
   })
+  app.get('/reg', checkNotLogin)  // 检测是否登陆
   app.post('/reg', function(req, res){
     var name = req.body.name,
         password = req.body.password,
@@ -65,6 +86,7 @@ module.exports = function(app) {
   })
 
   // 登陆
+  app.get('/login', checkNotLogin)  // 检测是否登陆
   app.get('/login', function(req, res){
     res.render('login', {
       title: '登陆',
@@ -73,6 +95,8 @@ module.exports = function(app) {
       error: req.flash('error').toString()
     })
   })
+
+  app.get('/login', checkNotLogin)
   app.post('/login', function(req, res){
     // 生成密码的 md5
     var md5 = crypto.createHash('md5'),
@@ -96,14 +120,17 @@ module.exports = function(app) {
   })
 
   // 发表文章
+  app.get('/post', checkLogin)  // 检测登陆状态
   app.get('/post', function(req, res){
     res.render('post', { title: '发表' })
   })
+  app.post('/post', checkLogin)  // 检测登陆状态
   app.post('/post', function(req, res){
 
   })
 
   // 登出
+  app.get('/logout', checkLogin)  // 检测登陆状态
   app.get('/logout', function(req, res){
     req.session.user = null
     req.flash('success', '登出成功!')
